@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "TaskVault",
+    "slug": "taskvault",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "taskvault",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "com.taskvault.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.taskvault.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#E5258C"
+      }
+    },
+    "plugins": [
+      "expo-local-authentication",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FFFFFF"
+        }
+      ]
+    ]
+  }
+}
