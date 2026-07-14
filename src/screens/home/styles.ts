@@ -42,6 +42,9 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: moderateScale(8),
   },
+  fabDisabled: {
+    opacity: 0.6,
+  },
   fabText: {
     color: colors.textOnPrimary,
     fontSize: moderateScale(28),

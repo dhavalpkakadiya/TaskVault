@@ -41,6 +41,15 @@ Delete requires authentication first, then a native confirmation dialog. This pr
 **Centralized copy and theme**  
 All user-facing strings live in `AppStrings`; colors and spacing use `src/theme/`. Easier to review, test, and rebrand.
 
+## Assumptions / Out of Scope
+
+Intentionally left out to keep the submission focused on the security gate:
+
+- **No persistence** — todos reset on restart (in-memory Redux only)
+- **No filters / search / reorder** — core CRUD + auth only
+- **Auth at the UI layer** — `useHome` gates add/edit/delete before dispatch; not Redux middleware
+- **Committed native projects** — `android/` and `ios/` are present for bare Expo runs after `prebuild`
+
 ## How to Test Authentication
 
 ### iOS Simulator
@@ -64,7 +73,7 @@ Use the device’s real biometrics or PIN. Ensure a passcode is configured under
 - Cancelling auth does **not** open the add/edit modal or delete a task.
 - Failed auth shows the error overlay (`AuthGuard`).
 - Successful add/edit/delete shows the snackbar.
-- Delete shows a confirmation alert after auth.
+- Delete: swipe a task left → Delete → authenticate → confirm.
 
 ## Project Structure
 

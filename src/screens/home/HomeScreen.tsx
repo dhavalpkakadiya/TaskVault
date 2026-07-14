@@ -54,10 +54,16 @@ const HomeScreen: React.FC = () => {
         />
 
         <Pressable
-          style={[styles.fab, { bottom: FAB_BOTTOM_MARGIN + insets.bottom }]}
+          style={[
+            styles.fab,
+            { bottom: FAB_BOTTOM_MARGIN + insets.bottom },
+            isAuthenticating && styles.fabDisabled,
+          ]}
           onPress={openModalForAdd}
+          disabled={isAuthenticating}
           accessibilityRole="button"
           accessibilityLabel={AppStrings.home.addNewTask}
+          accessibilityState={{ disabled: isAuthenticating }}
         >
           <Text style={styles.fabText}>{AppStrings.home.fabIcon}</Text>
         </Pressable>

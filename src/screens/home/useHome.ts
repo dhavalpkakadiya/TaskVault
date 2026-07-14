@@ -3,11 +3,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { Todo, TodoFormValues } from "@/interface";
 import { addTodo, deleteTodo, updateTodo } from "@/redux";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const EMPTY_FORM: TodoFormValues = { title: "", description: "" };
+const SNACKBAR_DURATION_MS = 2500;
 
 // Add, edit, and delete require device auth before the action runs.
 export const useHome = () => {
@@ -22,10 +23,25 @@ export const useHome = () => {
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [formValues, setFormValues] = useState<TodoFormValues>(EMPTY_FORM);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const snackbarTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showSnackbar = useCallback((message: string) => {
+    if (snackbarTimeoutRef.current) {
+      clearTimeout(snackbarTimeoutRef.current);
+    }
     setSnackbarMessage(message);
-    setTimeout(() => setSnackbarMessage(null), 2500);
+    snackbarTimeoutRef.current = setTimeout(() => {
+      setSnackbarMessage(null);
+      snackbarTimeoutRef.current = null;
+    }, SNACKBAR_DURATION_MS);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (snackbarTimeoutRef.current) {
+        clearTimeout(snackbarTimeoutRef.current);
+      }
+    };
   }, []);
 
   const openModalForAdd = useCallback(async () => {

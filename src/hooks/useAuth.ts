@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { AppStrings } from "@/constants";
 import { AuthResult } from "@/interface";
@@ -12,12 +12,19 @@ import {
 export function useAuth() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const isAuthenticatingRef = useRef(false);
 
   const clearAuthError = useCallback(() => {
     setAuthError(null);
   }, []);
 
   const authenticateAsync = useCallback(async (): Promise<AuthResult> => {
+    // Ignore re-entrant taps while a biometric/PIN prompt is already open.
+    if (isAuthenticatingRef.current) {
+      return { success: false };
+    }
+
+    isAuthenticatingRef.current = true;
     setIsAuthenticating(true);
     setAuthError(null);
 
@@ -37,6 +44,7 @@ export function useAuth() {
       setAuthError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
+      isAuthenticatingRef.current = false;
       setIsAuthenticating(false);
     }
   }, []);
